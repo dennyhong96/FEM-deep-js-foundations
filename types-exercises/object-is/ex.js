@@ -1,30 +1,34 @@
 // TODO: define polyfill for `Object.is(..)`
 if (!Object.is /* || true */) {
-	Object.is = function (val1, val2) {
-		// Test for -0s
-		if (isNeg0(val1) || isNeg0(val2)) {
-			// Vals are the same if val1 and val2 are both negetive 0
-			return isNeg0(val1) && isNeg0(val2);
+	Object.is = (val1, val2) => {
+		// Test if a number is -0
+		const isItNegZero = (val) => {
+			// -0 === 0
+			// 1/-0 === -Infinity
+			// 1/0 === Infinity
+			return val === 0 && 1 / val === -Infinity;
+		};
+
+		// Test if a number is NaN
+		const isItNaN = (val) => {
+			// NaN !== NaN - NaN is the only number that's not equal to itself
+			return val !== val;
+		};
+
+		// Handle -0 cases
+		if (isItNegZero(val1) || isItNegZero(val2)) {
+			// Two vals are identical if they are both negetive 0
+			return isItNegZero(val1) && isItNegZero(val2);
 		}
 
-		// Test for NaNs
+		// Handle NaNs cases
 		if (isItNaN(val1) && isItNaN(val2)) {
-			// Vals are the same if val1 and val2 are both NaN
+			// Two vals are identical if they are both NaN
 			return true;
 		}
 
-		// Normal cases
+		// Handle normal cases with strict comparasion
 		return val1 === val2;
-
-		function isNeg0(val) {
-			// -0 === 0, 1/-0===-Infinity, 1/0===Infinity
-			return val === 0 && 1 / val === -Infinity;
-		}
-
-		function isItNaN(val) {
-			// NaN!==NaN
-			return val !== val;
-		}
 	};
 }
 
