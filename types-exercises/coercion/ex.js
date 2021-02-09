@@ -21,10 +21,7 @@ function hoursAttended(attended, length) {
 	attendedNum = Number(attended);
 	lengthNum = Number(length);
 
-	// HANDLE NAN
-	if (Number.isNaN(attendedNum) || Number.isNaN(lengthNum)) return false;
-
-	// MUST BE GT ZERO
+	// MUST BE GT ZERO (ALSO HANDLES NaN)
 	if (!(attendedNum > 0 && lengthNum > 0)) return false;
 
 	// MUST BE WHOLE NUMBERS
